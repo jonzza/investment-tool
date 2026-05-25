@@ -1,0 +1,26 @@
+# Ympäristömuuttujat ja salaisuudet - EI KOSKAAN GITTIIN
+.env
+.env.local
+.env.*.local
+
+# Python-virtuaaliympäristö
+venv/
+.venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Raportit ja logit (ei tarvitse versiohallintaan)
+reports/
+logs/
+
+# IDE-tiedostot
+.vscode/
+.idea/
+*.swp
+
+# OS-tiedostot
+.DS_Store
+Thumbs.db
