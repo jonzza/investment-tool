@@ -1,13 +1,13 @@
 # News Investor MVP
 
-Hakee uutisia RSS-syötteistä, seuloo ne Claude Haikulla, analysoi tärkeimmät
-Sonnetilla ja kirjoittaa päivittäisen markkinakatsauksen suomeksi.
+Fetches news from RSS feeds, screens them with Claude Haiku, analyzes the most important ones
+with Sonnet, and writes a daily market digest in Finnish.
 
-## Asennus
+## Setup
 
-1. **Kloonaa projekti omaan kansioon** (tai luo manuaalisesti).
+1. **Clone the project into your own folder** (or create it manually).
 
-2. **Luo virtuaaliympäristö ja asenna riippuvuudet:**
+2. **Create a virtual environment and install dependencies:**
 
    ```bash
    cd news-investor-mvp
@@ -17,70 +17,70 @@ Sonnetilla ja kirjoittaa päivittäisen markkinakatsauksen suomeksi.
    pip install -r requirements.txt
    ```
 
-3. **Luo `.env`-tiedosto** (kopioi `.env.example` malliksi):
+3. **Create a `.env` file** (copy `.env.example` as a template):
 
    ```bash
    cp .env.example .env
    ```
 
-   Hae API-avain osoitteesta https://console.anthropic.com/ ja
-   liitä se `.env`-tiedostoon:
+   Get an API key from https://console.anthropic.com/ and
+   paste it into the `.env` file:
 
    ```
    ANTHROPIC_API_KEY=sk-ant-api03-...
    ```
 
-   Aseta konsolissa myös kuukausittainen käyttökatto (Spending limits) -
-   esim. 30 USD/kk - turvaverkoksi.
+   Also set a monthly spending limit (Spending limits) in the console -
+   e.g. $30/month - as a safety net.
 
-## Ajaminen
+## Running
 
 ```bash
 python main.py
 ```
 
-Yhden ajon kesto on tyypillisesti 2-5 minuuttia. Lopputulos tallennetaan
-`reports/YYYY-MM-DD.md`-tiedostoon ja tulostetaan myös konsoliin.
+A single run typically takes 2-5 minutes. The result is saved to
+`reports/YYYY-MM-DD.md` and also printed to the console.
 
-## Komponenttien testaus erikseen
+## Testing components separately
 
-Jokaista vaihetta voi ajaa erikseen kehityksen aikana:
+Each stage can be run on its own during development:
 
 ```bash
-python fetcher.py        # Hae RSS, tulosta 5 ensimmäistä
-python screener.py       # Hae + seuloo 10 artikkelia
-python analyzer.py       # Hae + seuloo + analysoi
+python fetcher.py        # Fetch RSS, print the first 5
+python screener.py       # Fetch + screen 10 articles
+python analyzer.py       # Fetch + screen + analyze
 ```
 
-## Konfigurointi
+## Configuration
 
-Säädä `config.py`-tiedostossa:
-- `RSS_FEEDS` - mitä uutislähteitä käytetään
-- `SIGNIFICANCE_THRESHOLD` - kuinka korkea pistemäärä vaaditaan syväanalyysiin (oletus 7)
-- `MAX_ANALYSES` - maksimi syväanalyysejä per ajo (kustannuskatto, oletus 20)
-- `MODEL_SCREENING` / `MODEL_ANALYSIS` - käytetyt Claude-mallit
+Adjust in `config.py`:
+- `RSS_FEEDS` - which news sources are used
+- `SIGNIFICANCE_THRESHOLD` - how high a score is required for deep analysis (default 7)
+- `MAX_ANALYSES` - maximum number of deep analyses per run (cost cap, default 20)
+- `MODEL_SCREENING` / `MODEL_ANALYSIS` - the Claude models used
 
-## Kustannusarvio
+## Cost estimate
 
-Karkea arvio per ajo:
-- Vaihe 1 (Haiku-seulonta ~100 uutista): ~$0.05-0.15
-- Vaihe 2 (Sonnet-syväanalyysi 10-20 uutista): ~$0.20-0.50
-- Vaihe 3 (Sonnet-synteesi): ~$0.05-0.15
+Rough estimate per run:
+- Stage 1 (Haiku screening of ~100 articles): ~$0.05-0.15
+- Stage 2 (Sonnet deep analysis of 10-20 articles): ~$0.20-0.50
+- Stage 3 (Sonnet synthesis): ~$0.05-0.15
 
-**Yhteensä ~$0.30-0.80/ajo, eli 10-25€/kk** yhdellä päivittäisellä ajolla.
+**Total ~$0.30-0.80/run, i.e. €10-25/month** with one daily run.
 
-## Tunnetut rajoitukset (MVP)
+## Known limitations (MVP)
 
-- Ei tietokantaa - ei muista mitä eilen näytti, voi näyttää saman uutisen uudelleen
-- Ei sähköpostia - raportti vain tiedostoon
-- Käyttää vain RSS-syötteiden tarjoamaa lyhyttä ingressitekstiä, ei hae koko artikkelia
-- Ei pörssikursseja eikä tulosraportteja
-- Ei prompt cachingia
+- No database - it doesn't remember what it showed yesterday, so it may show the same article again
+- No email - the report goes to a file only
+- Uses only the short intro text provided by the RSS feeds, does not fetch the full article
+- No stock prices or earnings reports
+- No prompt caching
 
-Nämä tulevat seuraavissa vaiheissa.
+These will come in later stages.
 
-## Tietoturva
+## Security
 
-- `.env` ei mene Gitiin (`.gitignore` huolehtii)
-- API-avaimet ovat henkilökohtaisia - älä jaa eteenpäin
-- Aseta käyttökatto Anthropicin konsolissa
+- `.env` is not committed to Git (`.gitignore` takes care of this)
+- API keys are personal - do not share them
+- Set a spending limit in the Anthropic console
